@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+    
+</head>
+
+<body>
+    <h1 style="text-align:center ;margin:0 auto; width:500px;">pwa push server</h1></br>
+    <div ng-app="myApp" ng-controller="registerCtrl"
+        style="text-align:center ;margin:0 auto;height: 500px; width:500px;border:2px solid #00F;">
+        <input type="text" 
+        style="width: 300px;height: 100px; margin-top: 20px;font-size:xx-large;" name="message" ng-model="push_msg" required>
+
+
+        <button ng-click="pushMsg()"
+            style="width: 300px;height: 100px; margin-top: 20px;font-size:xx-large;">push</button></br>
+        <label style="font-size:xx-large;color: brown;">tips:{{tips}}</label>
+    </div>
+
+</body>
+
+</html>
+<script>
+    var serverAddr = "https://muti-project5-qxaj8a004-xiong3660905.vercel.app/api"
+    var app = angular.module('myApp', []);
+    app.controller('registerCtrl', function ($scope) {
+        $scope.pushMsg = function () {
+            $scope.tips = "pushing ......"
+            return fetch(serverAddr + '/pushmsg', {
+                method: 'post',
+                headers: new Headers({
+                    'content-type': 'application/json'
+                }),
+                body: JSON.stringify({
+                    message: $scope.push_msg
+                })
+            }).then(res => {
+                console.log(res)
+                $scope.tips = "push msg success"
+                $scope.$digest();
+            });;
+        }
+    })
+</script>
